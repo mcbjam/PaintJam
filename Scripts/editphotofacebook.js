@@ -1,13 +1,17 @@
-﻿$(document).ready(function () {
+﻿//var baseurl = 'http://mafreemcbjam.zapto.org/mcbjam7/';
+//var baseurl = 'http://www.mcbjam.com/';
+var baseurl = 'https://facebook-mcbjam.eu01.aws.af.cm/';
+$(document).ready(function () {
 
     //var fbAppId = '445930615488341';
-    var fbAppId = '241755759297550';
-    var accesstoken = '';
-    var imgsource = 'http://www.w3.org/html/logo/downloads/HTML5_Logo_512.png';
-    var scopes = '';
-    var albums = '';
-    var profilreponse = '';
+   // var fbAppId = '241755759297550';
+    var fbAppId = "559121044132256"  // appfogg
     
+
+    var albums = '';
+    var profilresponse = '';
+    
+
     window.fbAsyncInit = function () {
         FB.init({
             appId: fbAppId,        // App ID
@@ -20,10 +24,14 @@
             if (response.status === 'connected') {
                 // connected
                 profil();
+                if (document.location.href == baseurl+"editphoto.html") {
+                    dojob();
+                }
             } else if (response.status === 'not_authorized') {
-                // not_authorized
+                
                 profil();
             } else {
+                //document.location.href = "/mcbjam7/";
                 // not_logged_in
                 //login();
             }
@@ -39,12 +47,15 @@
         ref.parentNode.insertBefore(js, ref);
     }(document));
 
-   // $("#postonfacebook").click(postphoto);
+    // $("#postonfacebook").click(postphoto);
     $("#postonfacebook").click(uploadphoto);
+
 })
 
 
 function postphoto() {
+    // Post photo from local. Don't work yet
+
     accesstoken = FB.getAuthResponse()['accessToken'];
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
@@ -57,54 +68,55 @@ function postphoto() {
 
     var dataURL = canvas.toDataURL("image/png");
 
-   //var datafinal= dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-  
+    //var datafinal= dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+
     var datafinal = dataURL.replace("data:image/png;base64,", "");
 
-   FB.api('/10151170935408614/photos', 'post', {
-       source: datafinal,
+    FB.api('/10151170935408614/photos', 'post', {
+        source: datafinal,
 
-   }, function (response) {
+    }, function (response) {
 
-       if (!response || response.error) {
-          alert('Error!');
-       } else {
-           alert('Upload OK!');
-       }
-   });
+        if (!response || response.error) {
+            alert('Error!');
+        } else {
+            alert('Upload OK!');
+        }
+    });
 
 
-   //var postMSG = "Your message";
-   //var url = 'https://graph.facebook.com/10151170935408614/photos?access_token=' + accesstoken + "&message=" + postMSG;
-   //var imgURL = "$('#image1').attr('src')";//change with your external photo url
-   //var formData = new FormData();
-   //formData.append("source", imgURL);
+    //var postMSG = "Your message";
+    //var url = 'https://graph.facebook.com/10151170935408614/photos?access_token=' + accesstoken + "&message=" + postMSG;
+    //var imgURL = "$('#image1').attr('src')";//change with your external photo url
+    //var formData = new FormData();
+    //formData.append("source", imgURL);
 
-   //$.ajax({
-   //    url: url,
-   //    data: formData,
-   //    cache: false,
-   //    contentType: false,
-   //    processData: false,
-   //    type: 'POST',
+    //$.ajax({
+    //    url: url,
+    //    data: formData,
+    //    cache: false,
+    //    contentType: false,
+    //    processData: false,
+    //    type: 'POST',
 
-   //    success: function (data) {
-   //        alert("POST SUCCESSFUL");
-   //    }
-   //});
+    //    success: function (data) {
+    //        alert("POST SUCCESSFUL");
+    //    }
+    //});
 }
 
 function uploadphoto() {
+    //Upload photo from url WOrk
     var imgURL = $('#image1').attr('src');
-
     FB.api('/10151524688338614/photos', 'post', {
-        message: profilreponse.name + ' a customizé sa photo sur McbJam.com',
-        url: imgURL
+        message: profilresponse.name +' Edited a Photo using Paint Jam on www.mcbjam.com',
+        url: imgURL,
+      
     }, function (response) {
         if (!response || response.error) {
             alert('Error occured');
         } else {
-            alert("Votre photo a été uploader sur facebook");
+            alert('Your Photo was upload on Facebook');
         }
     });
 }
@@ -125,15 +137,13 @@ function login() {
 
 function profil() {
     FB.api('/me?fields=picture,name,name_format,link', function (response) {
-        profilreponse = response;
+        profilresponse = response;
         $('#profil').attr('src', response.picture.data.url);
     });
 }
 
 
 function dojob() {
-   
-
     FB.api('/me/albums?fields=id,name,link,photos.fields(id,name,link,picture,source)', function (resp) {
         albums = resp.data;
         $('#albumlist').empty();
@@ -146,40 +156,39 @@ function dojob() {
             choosealbum(resp.data[0].id);
         }
     });
-
-    $("#loginbutton").hide();
+    $("#hero").hide();
     $("#app").show();
-    $("#launcheditor").show();
-    $("#postonfacebook").show();
 
 }
-                  
-
+function dojobredirect() {
+    document.location.href = baseurl + "editphoto.html";
+}
 function choosealbum(id) {
 
     $('#albums').empty();
-       for (var i = 0, n = albums.length; i < n; i++) {
-           var album = albums[i];
-           if (album.id == id) {
-               i = n;
-                if (album.photos) {
-                    for (var j = 0, l = album.photos.data.length; j < l; j++) {
-                        var photo = album.photos.data[j];
-                        var urlpicture = photo.picture;
-                        var source = photo.source;
-                        $('#albums').append('<img src="' + urlpicture + '" onclick=choosephoto("' + source + '") />');
-                    }
-                    $('#albums').append('</div>');
+    for (var i = 0, n = albums.length; i < n; i++) {
+        var album = albums[i];
+        if (album.id == id) {
+            i = n;
+            if (album.photos) {
+                for (var j = 0, l = album.photos.data.length; j < l; j++) {
+                    var photo = album.photos.data[j];
+                    var urlpicture = photo.picture;
+                    var source = photo.source;
+                    $('#albums').append('<img src="' + urlpicture + '" onclick=choosephoto("' + source + '") />');
                 }
+                $('#albums').append('</div>');
             }
         }
-       choosephoto(album.photos.data[0].source);
+    }
+   // choosephoto(album.photos.data[0].source);
 }
 
 
 
 function choosephoto(picture) {
-    $('#image1').attr('src', picture);
+   // $('#image1').attr('src', picture);
+    launchEditor('image1', picture);
 }
 
 function post() {
@@ -189,6 +198,16 @@ function post() {
     }
     );
 }
+
+function posttowall() {
+    FB.api('498485180217277/freemcbjam:facetook', 'post', { profile: "http://www.facebook.com/pages/Freemcbjam-Community/263502307119653" },
+    function (response) {
+        alert(response);
+    }
+    );
+}
+
+
 
 function postToFeed() {
 
@@ -209,37 +228,4 @@ function postToFeed() {
     FB.ui(obj, callback);
 }
 
-
-	var featherEditor = new Aviary.Feather({
-       apiKey: '9xbR7Jb6dkWk3Uyo5mSnqA',
-       apiVersion: 2,
-       tools: 'all',
-       appendTo: 'injection_site',
-       onSave: function(imageID, newURL) {
-           var img = document.getElementById(imageID);
-           img.src = newURL;
-       },
-       onError: function(errorObj) {
-           alert(errorObj.message);
-       }
-   });
-   function launchEditor(id, src) {
-       featherEditor.launch({
-           image: id,
-           url: src
-       });
-      return false;
-   }
-	
-	
-
-function launchEditor(id, src) {
-    id = 'image1';
-    src = $('#image1').attr('src');
-    featherEditor.launch({
-        image: id,
-        url: src
-    });
-    return false;
-}
 

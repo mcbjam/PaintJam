@@ -5,22 +5,13 @@
     <title>Paint Jam</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Free Online Facebook Photo Editor. Editez gratuitement vos photo facebook.">
-    <meta name="author" content="mcbjam">
-    <meta name="keywords" content="photo, facebook, social, photo editor, free, online, post to facebook, photo on facebook">
-    <meta name="owner" content="mcbjam">
-    <meta NAME="Copyright" CONTENT="Mcb Jam.">
-    <META NAME="Language" CONTENT="en">
-     <META NAME="Distribution" CONTENT="global">
-
-
-
-   <link rel="canonical" href="http://www.mcbjam.com" />
+    <meta name="author" content="McbJam.com">
+     <link rel="canonical" href="http://www.mcbjam.com" />
     <!-- Le styles -->
     <link href="Content/vendor/bootstrap.min.css" rel="stylesheet" />
     <link href="Content/vendor/bootstrap-responsive.min.css" rel="stylesheet" />
-    <link href="Content/vendor/jquery.smallipop.min.css" rel="stylesheet" />
-    <link href="Content/vendor/animate.min.css" rel="stylesheet" />
     <link href="Content/main.css" rel="stylesheet" />
+
 </head>
 <body>
      <div id="fb-root"></div>
@@ -40,7 +31,6 @@
                     </ul>
                 </div>
                 <!--/.nav-collapse -->
-                 <!--/.nav-collapse -->
                 <div class="navbar-form pull-right">
                     <div class="span4">
      
@@ -67,39 +57,34 @@
 
                   </div>
                     <div class="span2">
-                        <img id='profil' src='' />
-                        
-                    </div>
+                        <img id='profil' src='' />   
                 </div>
+            </div>
             </div>
         </div>
     </div>
 
     <div class="container">
-       
-
-
-
-         <!---hero unit------>
+        <!---hero unit------>
         <div class="hero-unit text-center" id="hero">
             <h1>Free Online Facebook </h1>
             <h1>Photo Editor</h1>
             <p>Paint Jam</p>
             <br />
       
-            <p>     
-                <input type="button" value='Photo Edition Demo' id="demo" class="btn btn-info" onclick="return launchEditor('image1', 'http://images.aviary.com/imagesv5/feather_default.jpg');"/>
-              
+            <p>
+                <input type="button" value='Photo Edition Demo' id="demo" class="btn btn-info" onclick="return launchEditor('image1', 'http://images.aviary.com/imagesv5/feather_default.jpg');" />
                 <br />
       
                 <br />
-                         <fb:login-button scope="user_photos,friends_photos,user_photo_video_tags,friends_photo_video_tags,photo_upload,publish_actions" onlogin="dojobredirect()" id="loginbutton" class="btn btn-primary" title="Start Edit Facebook Photo">
+                         <fb:login-button scope="user_photos,friends_photos,user_photo_video_tags,friends_photo_video_tags,photo_upload,publish_actions" onlogin="dojob()" id="loginbutton" class="btn btn-primary">
                           Edit Facebook Photo
                          </fb:login-button>          
             </p>
         </div>
         <!---End hero unit ----->
-	
+		
+
 <!-- Instantiate Feather -->
 <script type="text/javascript" src="https://feather.aviary.com/js/feather.js"></script>
 <script type='text/javascript'>
@@ -112,12 +97,12 @@
         onSave: function (imageID, newURL) {
             var img = document.getElementById(imageID);
             img.src = newURL;
+            var imgdownlad = document.getElementById("imgdownload");
+            imgdownlad.href = newURL;
+            
         },
         onError: function (errorObj) {
             alert(errorObj.message);
-        },
-        onClose : function (){
-            test();
         }
     });
     function launchEditor(id, src) {
@@ -130,21 +115,32 @@
 </script>
 
                 <div id='injection_site'></div>
-        <div class="row" id="app" style="display:none">
+      
+        
+          <div class="row" id="app" style="display:none">
                     <div class="span2">
                         <h3>My Albums</h3>
                         <ul id="albumlist"></ul>
+
+                        <h3>From URL </h3>
+                        <!-- Add an edit button, passing the HTML id of the image and the public URL of the image -->
+<p><input type="url" id="url" class="span2"/></p>
+<div id="loader" style="display:none"></div>
+<p><input type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' id="editfromurl" /></p>
+
                     </div>
-                    <div class="span10">
-                    <div class="pull-right span4">       
-                        
-                        <input type="button" id="postonfacebook" class="btn btn-large btn-success" value="Post to facebook" />                             
-                       
-                         <img id='image1' src='http://images.aviary.com/imagesv5/feather_default.jpg' onclick="launchEditor('image1',$('#image1').attr('src'))"/>
-                    </div>
-    <h3>My Photos</h3>
-                        <div id="albums"></div>
-                    
+                    <div class="span10" >
+                        <div class="pull-right span4" >       
+                            <input type="button" id="postonfacebook" class="btn btn-large btn-success" value="Post to facebook" />                             
+                             <a class="btn btn-large btn-success" href="http://images.aviary.com/imagesv5/feather_default.jpg" download="myimage" id="imgdownload">Download Image</a>
+                            
+                            
+                            <img id='image1' src='http://images.aviary.com/imagesv5/feather_default.jpg' onclick="launchEditor('image1',$('#image1').attr('src'))"/>
+                        </div>
+                        <div>
+                            <h3 >My Photos</h3>
+                            <div id="albums"></div>
+                        </div>
                     </div>
                     
             </div>
@@ -155,7 +151,7 @@
         <footer>
             <span class="span5">
             <p>&copy; McbJam 2013</p>
-                 <br />
+                             <br />
                 <br />
                 	        <script type="text/javascript"><!--
     google_ad_client = "ca-pub-5410913217004336";
@@ -164,8 +160,7 @@
     google_ad_width = 468;
     google_ad_height = 15;
     //-->
-</script>
-<script type="text/javascript"
+</script><script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 
@@ -199,25 +194,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     <script src="Scripts/vendor/modernizr.custom.62934.js"></script>
     <script src="Scripts/vendor/bootstrap.min.js"></script>
     <script src="Scripts/editphotofacebook.js"></script>
-    <script src="Scripts/vendor/jquery.smallipop.min.js"></script>
-
-    <script type="text/javascript">
-        $('#loginbutton').smallipop({
-            cssAnimations: {
-                enabled: true,
-                show: 'animated fadeInLeft',
-                hide: 'animated fadeOutRight'
-            }
-        });
-
-        function test() {
-            $('#loginbutton').smallipop('show');
-        }
-
-
-</script>
-
-
+    <script src="Scripts/editfromurl.js"></script>
 
      <!-- /Google analytics -->
       <script>
